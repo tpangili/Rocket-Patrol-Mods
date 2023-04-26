@@ -1,3 +1,6 @@
+// Global high score variable
+var highScore = 100;
+
 class Play extends Phaser.Scene {
     constructor() {
         super("playScene");
@@ -52,14 +55,16 @@ class Play extends Phaser.Scene {
             fontSize: '28px',
             backgroundColor: '#F3B141',
             color: '#843605',
-            align: 'right',
+            align: 'left',
             padding: {
                 top: 5,
                 bottom: 5,
             },
-            fixedWidth: 100
+            fixedWidth: 180
         }
-        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, this.p1Score, scoreConfig);
+        this.scoreLeft = this.add.text(borderUISize + borderPadding, borderUISize + borderPadding*2, 'SCORE:' + this.p1Score, scoreConfig);
+        // displays high score
+        this.scoreRight = this.add.text(game.config.width - (game.config.width/3 + borderPadding), borderUISize + borderPadding*2, 'HIGH:' + highScore, scoreConfig);
 
         // GAME OVER flag
         this.gameOver = false;
@@ -72,7 +77,7 @@ class Play extends Phaser.Scene {
             this.gameOver = true;
         }, null, this);
         // display timer
-        this.timeCenter = this.add.text(game.config.width - (game.config.width/2 + borderPadding), borderUISize + borderPadding*2, this.clock.getRemainingSeconds().toFixed(0), scoreConfig);
+        this.timeCenter = this.add.text(game.config.width - (game.config.width/2 + borderPadding*5 + borderPadding/3), borderUISize + borderPadding*2, 'TIME:' + this.clock.getRemainingSeconds().toFixed(0), scoreConfig);
 
         // 30-second speedup clock
         this.clock2 = this.time.delayedCall(game.settings.speedTimer, () => {
@@ -114,7 +119,7 @@ class Play extends Phaser.Scene {
         }
 
         // update timer text
-        this.timeCenter.text = this.clock.getRemainingSeconds().toFixed(0);
+        this.timeCenter.text = 'TIME:' + this.clock.getRemainingSeconds().toFixed(0);
     }
 
     checkCollision(rocket, ship) {
@@ -139,7 +144,13 @@ class Play extends Phaser.Scene {
         });
         // score add and repaint
         this.p1Score += ship.points;
-        this.scoreLeft.text = this.p1Score;
+        this.scoreLeft.text = 'SCORE:' + this.p1Score;
+        
+        // updates high score
+        if (this.p1Score > highScore) {
+            this.scoreRight.text = 'HIGH:' + this.p1Score;
+        }
+        
         // play explosion sound
         this.sound.play('sfx_explosion');
     }
