@@ -1,7 +1,11 @@
 // Thurmann Pangilinan
-// Rocket Patrol & Knuckles (featuring Dante from the Devil May Cry series)
-// 1,000,000 hours
+// Rocket Patrol: Epic Edition
+// Completion Time: 10 hours
 // 
+// Mod List:
+//  - Allow the player to control the Rocket
+//    after it's fired (5)
+//  - Speed increase after 30 seconds (5)
 
 let config = {
     type: Phaser.CANVAS,
