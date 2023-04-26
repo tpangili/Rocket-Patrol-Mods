@@ -71,11 +71,11 @@ class Play extends Phaser.Scene {
             this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
             this.gameOver = true;
         }, null, this);
-        // display timer (FIX THIS)
-        this.timeCenter = this.add.text(game.config.width - (game.config.width/2 + borderPadding), borderUISize + borderPadding*2, (game.settings.gameTimer/1000), scoreConfig);
+        // display timer
+        this.timeCenter = this.add.text(game.config.width - (game.config.width/2 + borderPadding), borderUISize + borderPadding*2, this.clock.getRemainingSeconds().toFixed(0), scoreConfig);
 
         // 30-second speedup clock
-        this.clock = this.time.delayedCall(game.settings.speedTimer, () => {
+        this.clock2 = this.time.delayedCall(game.settings.speedTimer, () => {
             this.ship01.moveSpeed += 1;
             this.ship02.moveSpeed += 1;
             this.ship03.moveSpeed += 1;
@@ -113,7 +113,8 @@ class Play extends Phaser.Scene {
             this.shipExplode(this.ship01);
         }
 
-        // update timer text (IMPLEMENT THIS)
+        // update timer text
+        this.timeCenter.text = this.clock.getRemainingSeconds().toFixed(0);
     }
 
     checkCollision(rocket, ship) {
