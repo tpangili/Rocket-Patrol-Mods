@@ -6,6 +6,8 @@
 //  - Allow the player to control the Rocket
 //    after it's fired (5)
 //  - Speed increase after 30 seconds (5)
+//  - High score that persists across scenes
+//    and is displayed in UI (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
 

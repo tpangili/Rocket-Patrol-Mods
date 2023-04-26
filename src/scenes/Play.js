@@ -1,5 +1,5 @@
-// Global high score variable
-var highScore = 100;
+// Global high score variable.
+var highScore = 500;
 
 class Play extends Phaser.Scene {
     constructor() {
@@ -148,7 +148,8 @@ class Play extends Phaser.Scene {
         
         // updates high score
         if (this.p1Score > highScore) {
-            this.scoreRight.text = 'HIGH:' + this.p1Score;
+            highScore = this.p1Score;
+            this.scoreRight.text = 'HIGH:' + highScore;
         }
         
         // play explosion sound
