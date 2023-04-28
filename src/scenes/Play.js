@@ -1,5 +1,5 @@
 // Global high score variable.
-var highScore = 500;
+var highScore = 200;
 
 class Play extends Phaser.Scene {
     constructor() {
@@ -10,7 +10,7 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
-        this.load.image('starfield', './assets/starfield.png');
+        this.load.image('starfield', './assets/starfield_new.png');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 32, startFrame: 0, endFrame: 9});
     }
