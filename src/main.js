@@ -12,6 +12,7 @@
 //    to the Play scene (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
+//  - New title screen created (10)
 //  - New animated sprite for the Spaceship
 //    enemies created using texture atlas (10)
 //  - New enemy Spaceship type that's smaller,

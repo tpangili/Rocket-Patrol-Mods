@@ -11,15 +11,21 @@ class Menu extends Phaser.Scene {
         this.load.audio('bgm_normal', './assets/normal_music.wav');
         this.load.audio('bgm_menu', './assets/menu_music.wav');
         this.load.audio('sfx_rocket', './assets/rocket_shot.wav');
+        // load title screen image
+        this.load.image('title', './assets/title_screen.png');
     }
 
     create() {
+        // Adds tile sprite for the title screen
+        this.title_screen = this.add.tileSprite(0, 0, 640, 480, 'title').setOrigin(0, 0);
+
         // menu text configuration
         let menuConfig = {
             fontFamily: 'Courier',
             fontSize: '28px',
-            backgroundColor: '#F3B141',
-            color: '#843605',
+            color: '#FFFFFF',
+            stroke: '#FFFFFF',
+            strokeThickness: 1,
             align: 'right',
             padding: {
                 top: 5,
@@ -29,11 +35,9 @@ class Menu extends Phaser.Scene {
         }
 
         // show menu text
-        this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
-        this.add.text(game.config.width/2, game.config.height/2, 'Use ←→ arrows to move & (F) to fire', menuConfig).setOrigin(0.5);
-        menuConfig.backgroundColor = '#00FF00';
-        menuConfig.color = '#000';
-        this.add.text(game.config.width/2, game.config.height/2 + borderUISize + borderPadding, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
+        //this.add.text(game.config.width/2, game.config.height/2 - borderUISize - borderPadding, 'ROCKET PATROL', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize*2 + borderPadding*2, 'Use the mouse to move & (F) to fire', menuConfig).setOrigin(0.5);
+        this.add.text(game.config.width/2, game.config.height/2 + borderUISize*4 + borderPadding*2, 'Press ← for Novice or → for Expert', menuConfig).setOrigin(0.5);
 
         // define keys
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
