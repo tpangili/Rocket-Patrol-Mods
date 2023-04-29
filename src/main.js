@@ -12,6 +12,8 @@
 //    to the Play scene (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
+//  - New enemy Spaceship type that's smaller,
+//    moves faster, and is worth more points (15)
 //
 // Sources:
 // - Game background music: Persistent Alien Mysteries

@@ -11,6 +11,8 @@ class Play extends Phaser.Scene {
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield_new.png');
+        // load texture atlases
+        this.load.atlas('alien', './assets/aliendude.png', './assets/aliendude.json');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 32, startFrame: 0, endFrame: 9});
     }
@@ -21,18 +23,41 @@ class Play extends Phaser.Scene {
         
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.alien = new Spaceship(this, game.config.width + borderUISize*9, borderUISize*4, 'alien', 'alien_1', 50, game.settings.alienSpeed).setOrigin(0, 0);
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
+        // alien animation config
+        this.anims.create({
+            key: 'run',
+            frameRate: 12,
+            repeat: -1,
+            frames: this.anims.generateFrameNames('alien', {
+                prefix: 'alien_',
+                start: 1,
+                end: 4
+            })
+        })
+        this.anims.create({
+            key: 'death',
+            frameRate: 24,
+            repeat: 0,
+            frames: this.anims.generateFrameNames('alien', {
+                prefix: 'death_',
+                start: 1,
+                end: 13
+            })
+        })
+
         // add rocket (p1)
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
-        // add spaceships (x3)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*4, 'spaceship', 0, 30).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*5 + borderPadding*2, 'spaceship', 0, 20).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*4, 'spaceship', 0, 10).setOrigin(0,0);
+        // add spaceships (x3) + alien (x1)
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*5 + borderPadding*2, 'spaceship', 0, 30, game.settings.spaceshipSpeed).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*6 + borderPadding*4, 'spaceship', 0, 20, game.settings.spaceshipSpeed).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*9, 'spaceship', 0, 10, game.settings.spaceshipSpeed).setOrigin(0,0);
         
         // background music (WIP)
         let music = this.sound.add('bgm_normal');
@@ -44,7 +69,7 @@ class Play extends Phaser.Scene {
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
-        // animation config
+        // explode animation config
         this.anims.create({
             key: 'explode',
             frames: this.anims.generateFrameNumbers('explosion', { start: 0, end: 9, first: 0}),
@@ -89,6 +114,7 @@ class Play extends Phaser.Scene {
             this.ship01.moveSpeed += 1;
             this.ship02.moveSpeed += 1;
             this.ship03.moveSpeed += 1;
+            this.alien.moveSpeed += 1;
         }, null, this);
     }
 
@@ -107,7 +133,9 @@ class Play extends Phaser.Scene {
             this.ship01.update();       // update spaceships (x3)
             this.ship02.update();
             this.ship03.update();
+            this.alien.update();
         }
+        this.alien.play('run', true);
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
@@ -121,6 +149,10 @@ class Play extends Phaser.Scene {
         if (this.checkCollision(this.p1Rocket, this.ship01)) {
             this.p1Rocket.reset();
             this.shipExplode(this.ship01);
+        }
+        if (this.checkCollision(this.p1Rocket, this.alien)) {
+            this.p1Rocket.reset();
+            this.shipExplode(this.alien);
         }
 
         // update timer text
@@ -140,13 +172,24 @@ class Play extends Phaser.Scene {
         // temporarily hide ship
         ship.alpha = 0;
         // create explosion sprite at ship's position
-        let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
-        boom.anims.play('explode');             // play explode animation
-        boom.on('animationcomplete', () => {    // callback after anim completes
-            ship.reset();                       // reset ship position
-            ship.alpha = 1;                     // make ship visible again
-            boom.destroy();                     // remove explosion sprite
-        });
+        if(ship.points >= 50) {
+            let boom = this.add.sprite(ship.x, ship.y, 'alien').setOrigin(0, 0);
+            boom.anims.play('death');
+            boom.on('animationcomplete', () => {    // callback after anim completes
+                ship.reset();                       // reset ship position
+                ship.alpha = 1;                     // make ship visible again
+                boom.destroy();                     // remove explosion sprite
+            });
+        }
+        else {
+            let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+            boom.anims.play('explode');             // play explode animation
+            boom.on('animationcomplete', () => {    // callback after anim completes
+                ship.reset();                       // reset ship position
+                ship.alpha = 1;                     // make ship visible again
+                boom.destroy();                     // remove explosion sprite
+            });
+        }
         // score add and repaint
         this.p1Score += ship.points;
         this.scoreLeft.text = 'SCORE:' + this.p1Score;
