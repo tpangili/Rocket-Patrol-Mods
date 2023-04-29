@@ -8,8 +8,21 @@
 //  - Speed increase after 30 seconds (5)
 //  - High score that persists across scenes
 //    and is displayed in UI (5)
+//  - Add (copyright-free) background music
+//    to the Play scene (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
+//
+// Sources:
+// - Game background music: Persistent Alien Mysteries
+//   by Speck (c) copyright 2023 Licensed under a
+//   Creative Commons Attribution Noncommercial  (3.0) license.
+//   https://dig.ccmixter.org/files/speck/66194 Ft: Apoxode,
+//   Ben Blohowiak, Martijn de Boer, abhishekkr
+// - Menu music: An Hour Adrift by Ezra Skull (c)
+//   copyright 2023 Licensed under a Creative Commons
+//   Attribution Noncommercial  (3.0) license.
+//   https://dig.ccmixter.org/files/Haskel/66099 Ft: Airtone
 
 let config = {
     type: Phaser.CANVAS,
