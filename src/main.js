@@ -1,6 +1,6 @@
 // Thurmann Pangilinan
-// Rocket Patrol: Epic Edition
-// Completion Time: 10 hours
+// Rocket Patrol DX
+// Completion Time: 15 hours
 // 
 // Mod List:
 //  - Allow the player to control the Rocket
@@ -12,6 +12,8 @@
 //    to the Play scene (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
+//  - New animated sprite for the Spaceship
+//    enemies created using texture atlas (10)
 //  - New enemy Spaceship type that's smaller,
 //    moves faster, and is worth more points (15)
 //

@@ -9,10 +9,10 @@ class Play extends Phaser.Scene {
     preload() {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
-        this.load.image('spaceship', './assets/spaceship.png');
         this.load.image('starfield', './assets/starfield_new.png');
         // load texture atlases
         this.load.atlas('alien', './assets/aliendude.png', './assets/aliendude.json');
+        this.load.atlas('new_ship', './assets/spaceship_new.png', './assets/spaceship_new.json');
         // load spritesheet
         this.load.spritesheet('explosion', './assets/explosion.png', {frameWidth: 64, frameHeight: 32, startFrame: 32, startFrame: 0, endFrame: 9});
     }
@@ -23,7 +23,14 @@ class Play extends Phaser.Scene {
         
         // green UI background
         this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        
+        // add new spaceship type: alien
         this.alien = new Spaceship(this, game.config.width + borderUISize*9, borderUISize*4, 'alien', 'alien_1', 50, game.settings.alienSpeed).setOrigin(0, 0);
+        // add spaceships (x3)
+        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*5 + borderPadding*2, 'new_ship', 'ship_1', 30, game.settings.spaceshipSpeed).setOrigin(0, 0);
+        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*6 + borderPadding*4, 'new_ship', 'ship_1', 20, game.settings.spaceshipSpeed).setOrigin(0,0);
+        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*9, 'new_ship', 'ship_1', 10, game.settings.spaceshipSpeed).setOrigin(0,0);
+        
         // white borders
         this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
         this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
@@ -52,12 +59,20 @@ class Play extends Phaser.Scene {
             })
         })
 
+        // spaceship animation config
+        this.anims.create({
+            key: 'fly',
+            frameRate: 24,
+            repeat: -1,
+            frames: this.anims.generateFrameNames('new_ship', {
+                prefix: 'ship_',
+                start: 1,
+                end: 6
+            })
+        })
+
         // add rocket (p1)
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
-        // add spaceships (x3) + alien (x1)
-        this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*5 + borderPadding*2, 'spaceship', 0, 30, game.settings.spaceshipSpeed).setOrigin(0, 0);
-        this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*6 + borderPadding*4, 'spaceship', 0, 20, game.settings.spaceshipSpeed).setOrigin(0,0);
-        this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*9, 'spaceship', 0, 10, game.settings.spaceshipSpeed).setOrigin(0,0);
         
         // background music (WIP)
         let music = this.sound.add('bgm_normal');
@@ -135,7 +150,11 @@ class Play extends Phaser.Scene {
             this.ship03.update();
             this.alien.update();
         }
+        // spaceship enemy animations
         this.alien.play('run', true);
+        this.ship01.play('fly', true);
+        this.ship02.play('fly', true);
+        this.ship03.play('fly', true);
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
