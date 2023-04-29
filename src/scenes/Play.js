@@ -180,6 +180,8 @@ class Play extends Phaser.Scene {
                 ship.alpha = 1;                     // make ship visible again
                 boom.destroy();                     // remove explosion sprite
             });
+            // play scream sound
+            this.sound.play('sfx_scream');
         }
         else {
             let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);

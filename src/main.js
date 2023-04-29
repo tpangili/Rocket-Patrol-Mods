@@ -25,6 +25,7 @@
 //   copyright 2023 Licensed under a Creative Commons
 //   Attribution Noncommercial  (3.0) license.
 //   https://dig.ccmixter.org/files/Haskel/66099 Ft: Airtone
+// - Scream SFX: https://freesound.org/people/soundadvices/sounds/187290/
 
 let config = {
     type: Phaser.CANVAS,
