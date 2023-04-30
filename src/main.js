@@ -1,8 +1,8 @@
 // Thurmann Pangilinan
 // Rocket Patrol DX
-// Completion Time: 15 hours
+// Completion Time: 17 hours
 // 
-// Mod List: (Total Points: 85)
+// Mod List: (Total Points: 100)
 //  - Allow the player to control the Rocket
 //    after it's fired (5)
 //  - Speed increase after 30 seconds (5)
@@ -12,6 +12,8 @@
 //    to the Play scene (5)
 //  - Implement the 'FIRE' UI text from
 //    the original game (5)
+//  - Create a new scrolling tile sprite
+//    for the background (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
 //  - New title screen created (10)
@@ -21,6 +23,9 @@
 //    the background (10)
 //  - New enemy Spaceship type that's smaller,
 //    moves faster, and is worth more points (15)
+//  - Phaser's particle emitter used to create a
+//    particle explosion when a the rocket hits
+//    a spaceship (15)
 //
 // Sources:
 // - Game background music: Persistent Alien Mysteries

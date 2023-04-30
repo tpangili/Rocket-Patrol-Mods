@@ -12,6 +12,7 @@ class Play extends Phaser.Scene {
         this.load.image('starfield', './assets/starfield_new.png');
         this.load.image('dust', './assets/spacedust.png');
         this.load.image('debris', './assets/debris.png');
+        this.load.image('splode', './assets/explode_bit.png');
         // load texture atlases
         this.load.atlas('alien', './assets/aliendude.png', './assets/aliendude.json');
         this.load.atlas('new_ship', './assets/spaceship_new.png', './assets/spaceship_new.json');
@@ -153,6 +154,16 @@ class Play extends Phaser.Scene {
             fixedWidth: 0
         }
         this.fireText = this.add.text(game.config.width - (game.config.width/2 + borderPadding*5 + borderPadding/5), borderUISize - borderPadding*3, '', fireConfig);
+
+        // particle configuration
+        this.emitter = this.add.particles(0, 0, 'splode', {
+            speed: 24,
+            lifespan: 1500,
+            quantity: 10,
+            scale: { start: 1, end: 0 },
+            emitting: false,
+            duration: 500
+        });
     }
 
     update() {
@@ -224,6 +235,7 @@ class Play extends Phaser.Scene {
         // create explosion sprite at ship's position
         if(ship.points >= 50) {
             let boom = this.add.sprite(ship.x, ship.y, 'alien').setOrigin(0, 0);
+            this.emitter.explode(10, (ship.x + 20), (ship.y + 20));
             boom.anims.play('death');
             boom.on('animationcomplete', () => {    // callback after anim completes
                 ship.reset();                       // reset ship position
@@ -235,6 +247,7 @@ class Play extends Phaser.Scene {
         }
         else {
             let boom = this.add.sprite(ship.x, ship.y, 'explosion').setOrigin(0, 0);
+            this.emitter.explode(10, (ship.x + 30), (ship.y + 20));
             boom.anims.play('explode');             // play explode animation
             boom.on('animationcomplete', () => {    // callback after anim completes
                 ship.reset();                       // reset ship position
