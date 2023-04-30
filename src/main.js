@@ -2,7 +2,7 @@
 // Rocket Patrol DX
 // Completion Time: 15 hours
 // 
-// Mod List:
+// Mod List: (Total Points: 80)
 //  - Allow the player to control the Rocket
 //    after it's fired (5)
 //  - Speed increase after 30 seconds (5)
@@ -15,6 +15,8 @@
 //  - New title screen created (10)
 //  - New animated sprite for the Spaceship
 //    enemies created using texture atlas (10)
+//  - Implemented parallax scrolling for
+//    the background (10)
 //  - New enemy Spaceship type that's smaller,
 //    moves faster, and is worth more points (15)
 //
@@ -40,7 +42,7 @@ let config = {
 // create game object
 let game = new Phaser.Game(config);
 // reserve keyboard names
-let keyF, keyR, keyLEFT, keyRIGHT;
+let keyF, keyR, keyM, keyLEFT, keyRIGHT;
 // set UI sizes
 let borderUISize = game.config.height / 15;
 let borderPadding = borderUISize / 3;

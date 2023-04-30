@@ -10,6 +10,8 @@ class Play extends Phaser.Scene {
         // load images/tile sprites
         this.load.image('rocket', './assets/rocket.png');
         this.load.image('starfield', './assets/starfield_new.png');
+        this.load.image('dust', './assets/spacedust.png');
+        this.load.image('debris', './assets/debris.png');
         // load texture atlases
         this.load.atlas('alien', './assets/aliendude.png', './assets/aliendude.json');
         this.load.atlas('new_ship', './assets/spaceship_new.png', './assets/spaceship_new.json');
@@ -18,11 +20,9 @@ class Play extends Phaser.Scene {
     }
 
     create() {
-        // place tile sprite
+        // place tile sprites
         this.starfield = this.add.tileSprite(0, 0, 640, 480, 'starfield').setOrigin(0, 0);
-        
-        // green UI background
-        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        this.debris = this.add.tileSprite(0, 0, 640, 480, 'debris').setOrigin(0, 0);
         
         // add new spaceship type: alien
         this.alien = new Spaceship(this, game.config.width + borderUISize*9, borderUISize*4, 'alien', 'alien_1', 50, game.settings.alienSpeed).setOrigin(0, 0);
@@ -30,12 +30,6 @@ class Play extends Phaser.Scene {
         this.ship01 = new Spaceship(this, game.config.width + borderUISize*6, borderUISize*5 + borderPadding*2, 'new_ship', 'ship_1', 30, game.settings.spaceshipSpeed).setOrigin(0, 0);
         this.ship02 = new Spaceship(this, game.config.width + borderUISize*3, borderUISize*6 + borderPadding*4, 'new_ship', 'ship_1', 20, game.settings.spaceshipSpeed).setOrigin(0,0);
         this.ship03 = new Spaceship(this, game.config.width, borderUISize*6 + borderPadding*9, 'new_ship', 'ship_1', 10, game.settings.spaceshipSpeed).setOrigin(0,0);
-        
-        // white borders
-        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
-        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
 
         // alien animation config
         this.anims.create({
@@ -74,6 +68,17 @@ class Play extends Phaser.Scene {
         // add rocket (p1)
         this.p1Rocket = new Rocket(this, game.config.width/2, game.config.height - borderUISize - borderPadding, 'rocket').setOrigin(0.5, 0);
         
+        // overlay tile sprite
+        this.spacedust = this.add.tileSprite(0, 0, 640, 480, 'dust').setOrigin(0, 0);
+
+        // green UI background
+        this.add.rectangle(0, borderUISize + borderPadding, game.config.width, borderUISize * 2, 0x00FF00).setOrigin(0, 0);
+        // white borders
+        this.add.rectangle(0, 0, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, game.config.height - borderUISize, game.config.width, borderUISize, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(0, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
+        this.add.rectangle(game.config.width - borderUISize, 0, borderUISize, game.config.height, 0xFFFFFF).setOrigin(0, 0);
+
         // background music (WIP)
         let music = this.sound.add('bgm_normal');
         music.play();
@@ -81,6 +86,7 @@ class Play extends Phaser.Scene {
         // define keys
         keyF = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         keyR = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
+        keyM = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.M);
         keyLEFT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.LEFT);
         keyRIGHT = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.RIGHT);
 
@@ -96,7 +102,7 @@ class Play extends Phaser.Scene {
         // display score
         let scoreConfig = {
             fontFamily: 'Courier',
-            fontSize: '28px',
+            fontSize: '25px',
             backgroundColor: '#F3B141',
             color: '#843605',
             align: 'left',
@@ -117,7 +123,7 @@ class Play extends Phaser.Scene {
         scoreConfig.fixedWidth = 0;
         this.clock = this.time.delayedCall(game.settings.gameTimer, () => {
             this.add.text(game.config.width/2, game.config.height/2, 'GAME OVER', scoreConfig).setOrigin(0.5);
-            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or ← for Menu', scoreConfig).setOrigin(0.5);
+            this.add.text(game.config.width/2, game.config.height/2 + 64, 'Press (R) to Restart or (M) for Menu', scoreConfig).setOrigin(0.5);
             music.stop();
             this.gameOver = true;
         }, null, this);
@@ -126,10 +132,10 @@ class Play extends Phaser.Scene {
 
         // 30-second speedup clock
         this.clock2 = this.time.delayedCall(game.settings.speedTimer, () => {
-            this.ship01.moveSpeed += 1;
-            this.ship02.moveSpeed += 1;
-            this.ship03.moveSpeed += 1;
-            this.alien.moveSpeed += 1;
+            this.ship01.moveSpeed += 2;
+            this.ship02.moveSpeed += 2;
+            this.ship03.moveSpeed += 2;
+            this.alien.moveSpeed += 2;
         }, null, this);
     }
 
@@ -138,11 +144,13 @@ class Play extends Phaser.Scene {
         if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyR)) {
             this.scene.restart();
         }
-        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyLEFT)) {
+        if (this.gameOver && Phaser.Input.Keyboard.JustDown(keyM)) {
             this.scene.start("menuScene");
         }
         
-        this.starfield.tilePositionX -= 4;
+        this.starfield.tilePositionX -= 1;
+        this.debris.tilePositionX -= 3;
+        this.spacedust.tilePositionX -= 4;
         if (!this.gameOver) {
             this.p1Rocket.update();     // update rocket sprite
             this.ship01.update();       // update spaceships (x3)
