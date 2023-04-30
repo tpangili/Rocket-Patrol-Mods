@@ -137,6 +137,22 @@ class Play extends Phaser.Scene {
             this.ship03.moveSpeed += 2;
             this.alien.moveSpeed += 2;
         }, null, this);
+
+        // fire text configuration
+        let fireConfig = {
+            fontFamily: 'Courier',
+            fontSize: '25px',
+            color: '#000000',
+            align: 'right',
+            stroke: '#000000',
+            strokeThickness: 1,
+            padding: {
+                top: 5,
+                bottom: 5
+            },
+            fixedWidth: 0
+        }
+        this.fireText = this.add.text(game.config.width - (game.config.width/2 + borderPadding*5 + borderPadding/5), borderUISize - borderPadding*3, '', fireConfig);
     }
 
     update() {
@@ -163,6 +179,13 @@ class Play extends Phaser.Scene {
         this.ship01.play('fly', true);
         this.ship02.play('fly', true);
         this.ship03.play('fly', true);
+
+        if(this.p1Rocket.isFiring) {
+            this.showFire();
+        }
+        if(!(this.p1Rocket.isFiring)) {
+            this.fireGone();
+        }
 
         // check collisions
         if(this.checkCollision(this.p1Rocket, this.ship03)) {
@@ -231,5 +254,13 @@ class Play extends Phaser.Scene {
         
         // play explosion sound
         this.sound.play('sfx_explosion');
+    }
+
+    // shows fire text
+    showFire() {
+        this.fireText.text = 'F I R E';
+    }
+    fireGone() {
+        this.fireText.text = '';
     }
 }

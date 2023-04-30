@@ -2,7 +2,7 @@
 // Rocket Patrol DX
 // Completion Time: 15 hours
 // 
-// Mod List: (Total Points: 80)
+// Mod List: (Total Points: 85)
 //  - Allow the player to control the Rocket
 //    after it's fired (5)
 //  - Speed increase after 30 seconds (5)
@@ -10,12 +10,14 @@
 //    and is displayed in UI (5)
 //  - Add (copyright-free) background music
 //    to the Play scene (5)
+//  - Implement the 'FIRE' UI text from
+//    the original game (5)
 //  - Display time remaining (in seconds)
 //    on the screen (10)
 //  - New title screen created (10)
 //  - New animated sprite for the Spaceship
 //    enemies created using texture atlas (10)
-//  - Implemented parallax scrolling for
+//  - Implement parallax scrolling for
 //    the background (10)
 //  - New enemy Spaceship type that's smaller,
 //    moves faster, and is worth more points (15)
